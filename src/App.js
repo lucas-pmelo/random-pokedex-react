@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Axios from "axios";
 
 function App() {
+  const [pokemon, setPokemon] = useState({});
+
+  const searchPokemon = () => {
+    let randNum = Math.abs(Math.floor(Math.random() * (0 - 900)));
+    Axios.get(`https://pokeapi.co/api/v2/pokemon/${randNum}`).then((res) => {
+      setPokemon({
+        name: res.data.name.toUpperCase(),
+        img: res.data.sprites.front_default
+      });
+    });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="title">Melo's Pokedex</h1>
+      <button className="randomButton" onClick={searchPokemon}>
+        Get random Pokemon
+      </button>
+      <div className="pokemonName">{pokemon.name}</div>
+      <img className="pokemonImage" src={pokemon.img}></img>
     </div>
   );
 }
